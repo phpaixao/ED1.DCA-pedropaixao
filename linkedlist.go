@@ -159,11 +159,31 @@ func (lista *LinkedList) Pop() error {
 	}
 	aux := lista.head
 	// Aux da posição i sempre aponta pro node de i+1 
-	for i := 0; i<lista.Tamanho() - 2; i++{
+	for i := 0; i<lista.Tamanho()-2; i++{
 		aux = aux.next
 	}
 	aux.next = nil
 	lista.inserted--
+	return nil
+}
+
+// Inverte uma linkedlist
+func (lista *LinkedList) Invert() error{
+	if lista.Tamanho() == 0{
+		return errors.New(fmt.Sprintf("Lista possui tamanho igual a 0.\n"))
+	}
+	aux := lista.head
+	prox := aux.next
+	aux.next = nil
+	ant := aux
+	for i := 0; i<lista.Tamanho()-1; i++{
+		aux = prox
+		prox = aux.next 
+		aux.next = ant
+		ant = aux
+	}
+	lista.head = aux
+
 	return nil
 }
 
@@ -223,6 +243,10 @@ func main() {
     l.PushFront(555)
     fmt.Println("Depois do PushFront(555):")
     l.Print()
+
+	// Invert (inverte a linkedlist)
+	l.Invert()
+	l.Print()
 
     // Tamanho final
     fmt.Printf("Tamanho final da lista: %d\n", l.Tamanho())
