@@ -172,18 +172,17 @@ func (lista *LinkedList) Invert() error{
 	if lista.Tamanho() == 0{
 		return errors.New(fmt.Sprintf("Lista possui tamanho igual a 0.\n"))
 	}
-	aux := lista.head
-	prox := aux.next
-	aux.next = nil
-	ant := aux
+	aux := lista.head // Node atual
+	prox := aux.next  // Salva o proximo node para nao perder a referencia do resto da lista
+	aux.next = nil	  // Inverte o ponteiro do node atual
+	ant := aux        // Salva o node atual para que o ponteiro do proximo node aponte para este
 	for i := 0; i<lista.Tamanho()-1; i++{
-		aux = prox
-		prox = aux.next 
-		aux.next = ant
-		ant = aux
+		aux = prox       // Atualiza o node atual
+		prox = aux.next  // Salva o proximo node para nao perder a referencia do resto da lista
+		aux.next = ant   // Inverte o ponteiro do node atual
+		ant = aux        // Salva o node atual para que o ponteiro do proximo node aponte para este
 	}
-	lista.head = aux
-
+	lista.head = aux  // O node atual vira o head da linkedlist
 	return nil
 }
 
