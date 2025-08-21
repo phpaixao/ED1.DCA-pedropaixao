@@ -91,17 +91,36 @@ func (lista *DoubleLinkedList) Insert(index int, value int) error {
 	if index == 0{
 		lista.PushFront(value)
 		return nil
-	} 
-	aux := lista.head
-	// Aux da posição i sempre aponta pro node de i+1
-	for i := 0; i < index-1; i++{ 
-		aux = aux.next
 	}
+	if index == lista.Tamanho(){
+		lista.Append(value)
+		return nil
+	}
+	
 	novo_node := &Node{
 		value: value,
-		next: aux.next,
+		next: nil,
+		prev: nil,
 	}
-	aux.next = novo_node
+
+	var aux *Node 
+	if index <= lista.Tamanho()-1-index{
+		aux = lista.head
+		for i := 0; i<index-1; i++{
+			aux = aux.next
+		}
+		novo_node.next = aux.next
+		aux.next.prev = novo_node
+		aux.next = novo_node
+	} else {
+		aux = lista.tail
+		for i := lista.Tamanho()-1; i>index; i--{
+			aux = aux.prev
+		}
+		novo_node.prev = aux.prev
+		aux.prev.next = novo_node
+		aux.prev = novo_node
+	}
 	lista.inserted++
 	return nil
 }
@@ -111,35 +130,56 @@ func (lista *DoubleLinkedList) Remove(index int) error {
 	if index < 0 || index >= lista.inserted {
 		return errors.New(fmt.Sprintf("Index out of range: %d", index))
 	} 
-
-	if index == 0{
-		lista.head = lista.head.next
+	if lista.Tamanho() == 1{
+		lista.head = nil
+		lista.tail = nil
 		lista.inserted--
 		return nil
 	}
-	aux := lista.head
-	// Aux da posição i sempre aponta pro node de i+1
-	for i := 0; i<index-1; i++{
-		aux = aux.next
-	}
-	// O next do aux passa a ser o next do node atual que aux aponta
-	aux.next = aux.next.next
+	if index == 0{
+		lista.head = lista.head.next
+		lista.head.prev = nil
+	} else if index == lista.Tamanho()-1{
+		lista.tail = lista.tail.prev
+		lista.tail.next = nil
+	} else {
+		var aux *Node
+		if index <= lista.Tamanho()-1-index{
+			aux = lista.head
+			for i := 0; i<index-1; i++{
+				aux = aux.next
+			}
+			aux.next = aux.next.next
+			aux.next.prev = aux
+		} else {
+			aux = lista.tail
+			for i := lista.Tamanho()-1; i > index; i--{
+				aux = aux.prev
+			}
+			aux.prev = aux.prev.prev
+			aux.prev.next = aux
+		}
+	} 
 	lista.inserted--
-	return nil
+	return nil	
 }
+
 // Troca o valor guardado na posicao index por value
 func (lista *DoubleLinkedList) Set(index int, value int) error {
 	if index < 0 || index >= lista.Tamanho() {
 		return errors.New(fmt.Sprintf("Index out of range: %d", index))
 	}
-	if index == 0{
-		lista.head.value = value
-		return nil
-	}
-	aux := lista.head
-	// Aux da posição i sempre aponta pro node de i+1
-	for i := 0; i<index; i++{
-		aux = aux.next
+	var aux *Node
+	if index <= lista.Tamanho()-1-index{
+		aux = lista.head
+		for i := 0; i<index; i++{
+			aux = aux.next
+		}
+	} else {
+		aux = lista.tail
+		for i := lista.Tamanho()-1; i>index; i--{
+			aux = aux.prev
+		}
 	}
 	aux.value = value
 	return nil
