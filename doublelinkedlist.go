@@ -187,20 +187,16 @@ func (lista *DoubleLinkedList) Set(index int, value int) error {
 
 // Remove o ultimo elemento da doublelinkedlist
 func (lista *DoubleLinkedList) Pop() error {
-	if lista.Tamanho() <= 0 {
+	if lista.Tamanho() == 0 {
 		return errors.New(fmt.Sprintf("Lista já possui tamanho igual a 0.\n"))
 	}
 	if lista.Tamanho() == 1{
-		lista.head = nil
+		lista.head, lista.tail = nil, nil
 		lista.inserted--
-		return nil
+		return nil 
 	}
-	aux := lista.head
-	// Aux da posição i sempre aponta pro node de i+1 
-	for i := 0; i<lista.Tamanho()-2; i++{
-		aux = aux.next
-	}
-	aux.next = nil
+	lista.tail = lista.tail.prev
+	lista.tail.next = nil
 	lista.inserted--
 	return nil
 }
@@ -210,17 +206,16 @@ func (lista *DoubleLinkedList) Invert() error{
 	if lista.Tamanho() == 0{
 		return errors.New(fmt.Sprintf("Lista possui tamanho igual a 0.\n"))
 	}
-	aux := lista.head // Node atual
-	prox := aux.next  // Salva o proximo node para nao perder a referencia do resto da lista
-	aux.next = nil	  // Inverte o ponteiro do node atual
-	ant := aux        // Salva o node atual para que o ponteiro do proximo node aponte para este
+	aux := lista.head
+	prox := aux.next
+	aux.next, aux.prev = aux.prev, aux.next
+	lista.tail = aux
 	for i := 0; i<lista.Tamanho()-1; i++{
-		aux = prox       // Atualiza o node atual
-		prox = aux.next  // Salva o proximo node para nao perder a referencia do resto da lista
-		aux.next = ant   // Inverte o ponteiro do node atual
-		ant = aux        // Salva o node atual para que o ponteiro do proximo node aponte para este
+		aux = prox
+		prox = aux.next
+		aux.next, aux.prev = aux.prev, aux.next
 	}
-	lista.head = aux  // O node atual vira o head da doublelinkedlist
+	lista.head = aux
 	return nil
 }
 
