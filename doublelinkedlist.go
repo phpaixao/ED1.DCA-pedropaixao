@@ -186,19 +186,21 @@ func (lista *DoubleLinkedList) Set(index int, value int) error {
 }
 
 // Remove o ultimo elemento da doublelinkedlist
-func (lista *DoubleLinkedList) Pop() error {
+func (lista *DoubleLinkedList) Pop() (int, error) {
 	if lista.Tamanho() == 0 {
-		return errors.New(fmt.Sprintf("Lista já possui tamanho igual a 0.\n"))
+		return -1, errors.New("Lista já possui tamanho igual a 0.\n")
 	}
 	if lista.Tamanho() == 1{
+		val := lista.head.value
 		lista.head, lista.tail = nil, nil
 		lista.inserted--
-		return nil 
+		return val, nil 
 	}
+	val := lista.tail.value
 	lista.tail = lista.tail.prev
 	lista.tail.next = nil
 	lista.inserted--
-	return nil
+	return val, nil
 }
 
 // Inverte uma doublelinkedlist
@@ -231,55 +233,61 @@ func (lista *DoubleLinkedList) Print() {
 
 // Função main para testar as funções implementadas
 func main() {
-    
+
 	// inicializa a lista vazia
 	l := &DoubleLinkedList{}
 
-    // Adiciona elementos no final (Append)
-    for i := 0; i < 10; i++ {
-        l.Append(i)
-    }
-    fmt.Println("Depois do Append:")
-    l.Print()
+	// Adiciona elementos no final (Append)
+	for i := 0; i < 10; i++ {
+		l.Append(i)
+	}
+	fmt.Println("Depois do Append:")
+	l.Print()
 
-    // Insere no índice 2
-    l.Insert(2, 99)
-    fmt.Println("Depois do Insert(2, 99):")
-    l.Print()
+	// Insere no índice 2
+	l.Insert(2, 99)
+	fmt.Println("Depois do Insert(2, 99):")
+	l.Print()
 
-    // Remove do índice 2
-    l.Remove(2)
-    fmt.Println("Depois do Remove(2):")
-    l.Print()
+	// Remove do índice 2
+	l.Remove(2)
+	fmt.Println("Depois do Remove(2):")
+	l.Print()
 
-    // Altera valor do índice 0
-    l.Set(0, -10)
-    fmt.Println("Depois do Set(0, -10):")
-    l.Print()
+	// Altera valor do índice 0
+	l.Set(0, -10)
+	fmt.Println("Depois do Set(0, -10):")
+	l.Print()
 
-    // Remove o primeiro elemento
-    l.Remove(0)
-    fmt.Println("Depois do Remove(0):")
-    l.Print()
+	// Remove o primeiro elemento
+	l.Remove(0)
+	fmt.Println("Depois do Remove(0):")
+	l.Print()
 
-    // Pega o valor do índice 0
-    x, _ := l.Get(0)
-    fmt.Printf("Valor do índice 0: %d\n", x)
+	// Pega o valor do índice 0
+	x, _ := l.Get(0)
+	fmt.Printf("Valor do índice 0: %d\n", x)
 
-    // Pop (remove último elemento)
-    l.Pop()
-    fmt.Println("Depois do Pop():")
-    l.Print()
+	// Pop (remove último elemento)
+	val, err := l.Pop()
+	if err != nil {
+		fmt.Println("Erro no Pop():", err)
+	} else {
+		fmt.Printf("Pop() removeu: %d\n", val)
+	}
+	fmt.Println("Depois do Pop():")
+	l.Print()
 
-    // PushFront (insere no início)
-    l.PushFront(555)
-    fmt.Println("Depois do PushFront(555):")
-    l.Print()
+	// PushFront (insere no início)
+	l.PushFront(555)
+	fmt.Println("Depois do PushFront(555):")
+	l.Print()
 
 	// Invert (inverte a doublelinkedlist)
 	l.Invert()
+	fmt.Println("Depois do Invert():")
 	l.Print()
 
-    // Tamanho final
-    fmt.Printf("Tamanho final da lista: %d\n", l.Tamanho())
+	// Tamanho final
+	fmt.Printf("Tamanho final da lista: %d\n", l.Tamanho())
 }

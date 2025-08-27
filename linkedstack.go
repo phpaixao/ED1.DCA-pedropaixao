@@ -57,8 +57,40 @@ func (pilha *LinkedStack) Size() int {
 	return pilha.inserted
 }
 
+func (pilha *LinkedStack) Invert() error {
+	if pilha.IsEmpty() {
+		return errors.New("Lista vazia.")
+	}
+	aux := pilha.top
+	prox := aux.next
+	aux.next = nil
+	ant := aux
+	for i:=0; i<pilha.Size()-1; i++{
+		aux = prox
+		prox = aux.next
+		aux.next = ant
+		ant = aux
+	}
+	pilha.top = ant
+	return nil
+}
+
+func (pilha *LinkedStack) Print() {
+	auxV := make([] int, pilha.Size())
+	aux := pilha.top
+	for i:=0; i<pilha.Size(); i++{
+		auxV[i] = aux.value
+		aux = aux.next
+	}
+
+	for i:=pilha.Size()-1; i>=0; i--{
+		fmt.Printf("%d ", auxV[i])
+	}
+	fmt.Printf("\n")
+}
+
 func main() {
-	var pilha IStack = &LinkedStack{}
+	var pilha LinkedStack
 
 	fmt.Println("🔹 Testando pilha encadeada:")
 
@@ -73,6 +105,8 @@ func main() {
 	pilha.Push(30)
 
 	fmt.Println("Tamanho após inserções:", pilha.Size())
+	fmt.Print("Estado da pilha: ")
+	pilha.Print() // imprime do fundo para o topo: 10 20 30
 
 	// Topo da pilha
 	if val, err := pilha.Top(); err == nil {
@@ -87,6 +121,9 @@ func main() {
 	} else {
 		fmt.Println("Erro:", err)
 	}
+
+	fmt.Print("Estado da pilha após Pop: ")
+	pilha.Print() // imprime do fundo para o topo: 10 20
 
 	if val, err := pilha.Top(); err == nil {
 		fmt.Println("Novo topo:", val)
