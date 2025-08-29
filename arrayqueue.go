@@ -10,6 +10,7 @@ type IArrayQueue interface {
 	Dequeue() (int, error)
 	Size() int
 	Front() (int, error)
+	IsEmpty() bool
 }
 
 type ArrayQueue struct{
@@ -55,10 +56,25 @@ func (fila *ArrayQueue) Front() (int, error){
 	return fila.v[fila.front], nil
 }
 
+func (fila *ArrayQueue) IsEmpty() bool {
+	return fila.Size() == 0
+}
+
+// Print corrigido para fila circular
 func (fila *ArrayQueue) Print() {
-	for i:=0; i<fila.Size(); i++{
-		fmt.Printf("%d ", fila.v[i])
+	if fila.IsEmpty() {
+		fmt.Println("Fila vazia")
+		return
 	}
+	i := fila.front
+	for {
+		fmt.Printf("%d ", fila.v[i])
+		if i == fila.rear {
+			break
+		}
+		i = (i + 1) % len(fila.v)
+	}
+	fmt.Println()
 }
 
 func main() {
@@ -69,6 +85,9 @@ func main() {
 		rear:  -1,
 	}
 
+	// A lista está vazia?
+	fmt.Println("Fila está vazia?", fila.IsEmpty()) // Esperado: true
+
 	// insere elementos
 	fila.Enqueue(10)
 	fila.Enqueue(20)
@@ -76,16 +95,19 @@ func main() {
 	fmt.Print("Fila após inserir 10, 20, 30: ")
 	fila.Print()
 
+	// A lista está vazia?
+	fmt.Println("Fila está vazia?", fila.IsEmpty()) // Esperado: false
+
 	// mostra tamanho e front
 	fmt.Println("Tamanho:", fila.Size()) // esperado: 3
 	val, _ := fila.Front()
-	fmt.Println("Front:", val)           // esperado: 10
+	fmt.Println("Front:", val) // esperado: 10
 
 	// remove 2 elementos
 	val, _ = fila.Dequeue()
-	fmt.Println("Dequeued:", val) 
+	fmt.Println("Dequeued:", val)
 	val, _ = fila.Dequeue()
-	fmt.Println("Dequeued:", val) 
+	fmt.Println("Dequeued:", val)
 	fmt.Print("Fila após remover 2: ")
 	fila.Print()
 
@@ -96,17 +118,20 @@ func main() {
 	fila.Print()
 
 	// mostra o estado final
-	fmt.Println("Tamanho:", fila.Size()) 
+	fmt.Println("Tamanho:", fila.Size())
 	val, _ = fila.Front()
-	fmt.Println("Front:", val)           
+	fmt.Println("Front:", val)
 
 	// remove tudo
-	for i := 0; i < 3; i++ {
+	for !fila.IsEmpty() {
 		val, _ = fila.Dequeue()
 		fmt.Println("Dequeued:", val)
 	}
 	fmt.Print("Fila após remover tudo: ")
 	fila.Print()
+
+	// A lista está vazia?
+	fmt.Println("Fila está vazia?", fila.IsEmpty()) // Esperado: true
 
 	// tenta remover de lista vazia
 	_, err := fila.Dequeue()
