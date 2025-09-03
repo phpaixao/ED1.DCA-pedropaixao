@@ -19,7 +19,25 @@ type ArrayQueue struct{
 	rear int
 }
 
+func (fila *ArrayQueue) init(size int){
+	fila.v = make([] int, size)
+	fila.front, fila.rear = -1, -1
+}
+
+func (fila *ArrayQueue) doubleV(){
+	newV := make([] int, len(fila.v)*2)
+	for i:=fila.front; i<(fila.Size() + fila.front); i++{
+		newV[i-fila.front] = fila.v[i % len(fila.v)]
+	}
+	fila.v = newV
+	fila.front = 0
+	fila.rear = fila.Size() - 1
+}
+
 func (fila *ArrayQueue) Enqueue(val int){
+	if fila.Size() == len(fila.v){
+		fila.doubleV()
+	}
 	if fila.front == -1 && fila.rear == -1{
 		fila.front++
 		fila.rear++
@@ -62,28 +80,16 @@ func (fila *ArrayQueue) IsEmpty() bool {
 
 // Print corrigido para fila circular
 func (fila *ArrayQueue) Print() {
-	if fila.IsEmpty() {
-		fmt.Println("Fila vazia")
-		return
-	}
-	i := fila.front
-	for {
-		fmt.Printf("%d ", fila.v[i])
-		if i == fila.rear {
-			break
-		}
-		i = (i + 1) % len(fila.v)
+	for i:=fila.front; i<(fila.Size() + fila.front); i++{
+		fmt.Printf("%d ", fila.v[i % len(fila.v)])
 	}
 	fmt.Println()
 }
 
 func main() {
-	// cria fila de tamanho 5
-	fila := ArrayQueue{
-		v:     make([]int, 5),
-		front: -1,
-		rear:  -1,
-	}
+	// cria fila de tamanho 2
+	fila := ArrayQueue{}
+	fila.init(2)
 
 	// A lista está vazia?
 	fmt.Println("Fila está vazia?", fila.IsEmpty()) // Esperado: true
