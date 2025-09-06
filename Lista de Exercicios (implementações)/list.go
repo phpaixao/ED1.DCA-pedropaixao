@@ -75,8 +75,7 @@ func (list *LinkedList) Add(value int){
 		}
 		aux.next = new_node
 	}
-	list.inserte
-	d++
+	list.inserted++
 }
 
 func (list *DoubleLinkedList) Add(value int){
@@ -93,4 +92,48 @@ func (list *DoubleLinkedList) Add(value int){
 		list.tail = new_node
 	}
 	list.inserted++
+}
+
+func (list *ArrayList) AddOnIndex(value int, index int) error {
+	if index<0 || index > list.Size(){
+		return errors.New("Invalid index.")
+	} 
+	if len(list.v) == list.Size(){
+		list.doubleV()
+	}
+	for i:=list.Size(); i>index; i--{
+		list.v[i] = list.v[i-1]
+	}
+	list.v[index] = value
+	list.inserted++
+	return nil
+}
+
+func (list *LinkedList) AddOnIndex(value int, index int) error {
+	if index < 0 || index > list.Size(){
+		return errors.New("Invalid index.")
+	}
+	new_node := &Node1{
+		value: value,
+		next: nil,
+	}
+	if list.Size() == 0{
+		list.head = new_node
+		list.inserted++
+		return nil
+	}
+	aux := list.head
+	for i:=0; i<index-1; i++{
+		aux = aux.next
+	}
+	new_node.next = aux.next
+	aux.next = new_node
+	list.inserted++
+}
+
+func (list *DoubleLinkedList) AddOnIndex(value int, index int) error {
+	if index < 0 || index > list.Size(){
+		return errors.New("Invalid index.")
+	}
+	// continue aqui
 }
