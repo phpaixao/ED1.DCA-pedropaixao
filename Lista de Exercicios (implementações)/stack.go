@@ -110,6 +110,7 @@ func (stack *LinkedStack) Size() int {
 	return stack.inserted
 }
 
+
 func (stack *ArrayStack) Print(){
 	for i := stack.Size()-1; i>0; i--{
 		fmt.Printf("%d ", stack.v[i])
@@ -126,11 +127,27 @@ func (stack *LinkedStack) Print(){
 	fmt.Println()
 }
 
+func balparenteses(par string) bool{
+	stack := &ArrayStack{}
+	stack.Init(len(par))
+	for i := 0; i<len(par); i++{
+		if par[i] == '('{
+			stack.Push(1)
+		} else if par[i] == ')'{
+			_, err := stack.Pop()
+			if err != nil{
+				return false
+			}
+		}
+	}
+	return stack.IsEmpty()
+}
+
 func main() {
 	fmt.Println("=== Testando ArrayStack ===")
 	arrStack := &ArrayStack{}
 	arrStack.Init(2)
-
+	
 	fmt.Println("Empilhando valores: 10, 20, 30")
 	arrStack.Push(10)
 	arrStack.Push(20)
@@ -226,5 +243,25 @@ func main() {
 		fmt.Println("Peek em LinkedStack vazio retornou erro:", err)
 	} else {
 		fmt.Println("Peek em LinkedStack vazio retornou:", val)
+	}
+
+	fmt.Println("\n=== Testando balparenteses ===")
+
+	testes := []struct {
+		expr     string
+		expected bool
+	}{
+		{"(())", true},
+		{"(()", false},
+		{"()()()", true},
+		{"((())())", true},
+		{")(", false},
+		{"", true},
+		{"((())", false},
+	}
+
+	for _, t := range testes {
+		result := balparenteses(t.expr)
+		fmt.Printf("balparenteses(\"%s\") = %v, esperado = %v\n", t.expr, result, t.expected)
 	}
 }
