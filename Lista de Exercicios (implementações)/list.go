@@ -12,6 +12,7 @@ type IList interface {
 	Get(index int) (int, error)				//Feito
 	Set(value int, index int) error			//Feito
 	Size() int								//Feito
+	Reverse()
 }
 
 type ArrayList struct{
@@ -344,6 +345,46 @@ func (list *DoubleLinkedList) Size() int {
 	return list.inserted
 }
 
+func (list *ArrayList) Reverse(){
+	i_end := list.Size()-1
+	for i:=0; i<list.Size()/2; i++{
+		list.v[i], list.v[i_end] = list.v[i_end], list.v[i]
+		i_end--
+	}
+}
+
+func (list *LinkedList) Reverse(){
+	if list.Size() <= 1{
+		return
+	}
+	aux := list.head
+	prox := aux.next
+	aux.next = nil
+	prev := aux
+	for prox != nil{ //for i := 0; i<list.Size()-1; i++
+		aux = prox
+		prox = aux.next
+		aux.next = prev
+		prev = aux
+	}
+	list.head = aux
+}
+
+func (list *DoubleLinkedList) Reverse(){
+	if list.Size() <= 1{
+		return
+	}
+	aux := list.head
+	prox := aux.next
+	aux.next, aux.prev = aux.prev, aux.next
+	for prox != nil {
+		aux = prox
+		prox = aux.next
+		aux.next, aux.prev = aux.prev, aux.next
+	}
+	list.head, list.tail = list.tail, list.head
+}
+
 func (list *ArrayList) Print() {
 	for i:=0; i<list.Size(); i++{
 		fmt.Printf("%d ", list.v[i])
@@ -397,6 +438,11 @@ func main() {
 
 	fmt.Println("Tamanho ArrayList:", arr.Size())
 
+	// --- Testando Reverse ---
+	arr.Reverse()
+	fmt.Print("ArrayList após Reverse: ")
+	arr.Print()
+
 	fmt.Println("\n=== Testando LinkedList ===")
 	ll := &LinkedList{}
 	ll.Add(10)
@@ -421,6 +467,11 @@ func main() {
 	ll.Print()
 
 	fmt.Println("Tamanho LinkedList:", ll.Size())
+
+	// --- Testando Reverse ---
+	ll.Reverse()
+	fmt.Print("LinkedList após Reverse: ")
+	ll.Print()
 
 	fmt.Println("\n=== Testando DoubleLinkedList ===")
 	dll := &DoubleLinkedList{}
@@ -457,4 +508,9 @@ func main() {
 	dll.Print()
 
 	fmt.Println("Tamanho DoubleLinkedList:", dll.Size())
+
+	// --- Testando Reverse ---
+	dll.Reverse()
+	fmt.Print("DoubleLinkedList após Reverse: ")
+	dll.Print()
 }
