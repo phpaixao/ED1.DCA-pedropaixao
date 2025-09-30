@@ -32,12 +32,33 @@ func merge(v []int, e []int, d []int) {
 	}
 }
 
+func MergeSort(v []int) {
+	if len(v) > 1{
+		meio := len(v)/2
+		e := make([] int, meio)
+		d := make([] int, len(v) - meio)
+
+		i := 0
+		for index_e := 0; index_e < len(e); index_e++{
+			e[index_e] = v[i]
+			i++
+		}
+
+		for index_d := 0; index_d < len(d); index_d++{
+			d[index_d] = v[i]
+			i++
+		}
+
+		MergeSort(e)
+		MergeSort(d)
+		merge(v, e, d)
+	}
+}
 
 func main() {
-	v := []int{9, 4, 3, 6, 3, 2, 5, 7, 1, 8}
-	e := []int{3, 3, 4, 6, 9}
-	d := []int{1, 2, 5, 7, 8}
-
-	merge(v, e, d)
+	v := []int{9,4,3,6,3,2,5,7,1,8}
+	
+	MergeSort(v)
+	
 	fmt.Printf("%d", v)
 }
