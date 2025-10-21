@@ -84,6 +84,22 @@ func (no *Node) SearchNode(val int) bool {
 	}
 }
 
+func (bst *BST) Min() int {
+	no := bst.root
+	for no.left != nil {
+		no = no.left
+	}
+	return no.val 
+}
+
+func (bst *BST) Max() int {
+	no := bst.root
+	for no.right != nil {
+		no = no.right
+	}
+	return no.val
+}
+
 func main(){
 	bst := &BST{}
 	bst.Add(10)
@@ -96,4 +112,7 @@ func main(){
 	fmt.Println(bst.Search(3))
 	fmt.Println(bst.Search(8))
 	fmt.Println(bst.Search(20))
+
+	fmt.Println(bst.Min())
+	fmt.Println(bst.Max())
 }
