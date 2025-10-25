@@ -101,6 +101,20 @@ func MergeSort(v[] int) {
 	merge(v, e, d)
 }
 
+func QuickSort(v [] int, ini int, fim int) {
+	
+}
+
+func Partition(v []int, ini int, fim int) int {
+	pivot := v[fim]
+	pIndex := ini
+	for i := 0; i<fim; i++ {
+		if v[i] <= pivot {
+			
+		}
+	}
+}
+
 func main() {
 	vetor := []int{2, 1, 0, 4, 3, 10, 1, 4, 2}
 	MergeSort(vetor)
