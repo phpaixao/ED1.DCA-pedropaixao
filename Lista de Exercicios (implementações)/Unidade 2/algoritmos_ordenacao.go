@@ -8,9 +8,9 @@ import (
 func SelectionSort(v []int){
 	var i_menor int
 	for i := 0; i < len(v)-1; i++ {
-		i_menor = 0
+		i_menor = i
 		for j := i+1; j < len(v); j++ {
-			if v[i] > v[j] {
+			if v[j] < v[i_menor] {
 				i_menor = j
 			} 
 		}
@@ -22,9 +22,9 @@ func BubbleSort(v []int){
 	for i := 0; i<len(v)-1; i++{
 		trocou := false
 		for j := 0; j < len(v)-1-i; j++ {
-			if v[i] > v[i+1] {
+			if v[j] > v[j+1] {
 				trocou = true
-				v[i], v[i+1] = v[i+1], v[i]
+				v[j], v[j+1] = v[j+1], v[j]
 			}
 		}
 		if !trocou {return}
@@ -72,7 +72,7 @@ func merge(v []int, e []int, d []int) {
 
 func MergeSort(v[] int) {
 	// Se o vetor for de tam = 1, encerro a recursividade
-	if len(v) == 1 {
+	if len(v) <= 1 {
 		return
 	}
 
@@ -101,22 +101,108 @@ func MergeSort(v[] int) {
 	merge(v, e, d)
 }
 
-func QuickSort(v [] int, ini int, fim int) {
-	
+func QuickSort(v []int, ini int, fim int) {
+	if ini >= fim {
+		return
+	}
+	indexPivot := Partition(v, ini, fim)
+	QuickSort(v, ini, indexPivot-1)
+	QuickSort(v, indexPivot+1, fim)
 }
 
 func Partition(v []int, ini int, fim int) int {
+	randIndex := rand.Intn(fim-ini+1) + ini
+
+	v[randIndex], v[fim] = v[fim], v[randIndex]
+
 	pivot := v[fim]
 	pIndex := ini
-	for i := 0; i<fim; i++ {
-		if v[i] <= pivot {
-			
+	var i int
+	for i = ini; i < fim; i++ {
+		if v[i] < pivot {
+			v[i], v[pIndex] = v[pIndex], v[i]
+			pIndex++
 		}
 	}
+	v[pIndex], v[i] = v[i], v[pIndex]
+	return pIndex
 }
 
 func main() {
-	vetor := []int{2, 1, 0, 4, 3, 10, 1, 4, 2}
-	MergeSort(vetor)
-	fmt.Println(vetor)
+	// Semeia o 'rand' global UMA VEZ para o QuickSort
+	rand.Seed(time.Now().UnixNano())
+
+	// Função helper para obter um slice novo
+	getOriginal := func() []int {
+		return []int{5, 2, 8, 1, 9, 4, 7, 3, 6, 0}
+	}
+
+	// --- Teste 1: SelectionSort ---
+	fmt.Println("--- Testando SelectionSort ---")
+	data := getOriginal()
+	fmt.Println("Original:", data)
+	SelectionSort(data)
+	fmt.Println("Ordenado:", data)
+
+	// --- Teste 2: BubbleSort ---
+	fmt.Println("\n--- Testando BubbleSort ---")
+	data = getOriginal()
+	fmt.Println("Original:", data)
+	BubbleSort(data)
+	fmt.Println("Ordenado:", data)
+
+	// --- Teste 3: InsertionSort ---
+	fmt.Println("\n--- Testando InsertionSort ---")
+	data = getOriginal()
+	fmt.Println("Original:", data)
+	InsertionSort(data)
+	fmt.Println("Ordenado:", data)
+
+	// --- Teste 4: MergeSort ---
+	fmt.Println("\n--- Testando MergeSort ---")
+	data = getOriginal()
+	fmt.Println("Original:", data)
+	MergeSort(data)
+	fmt.Println("Ordenado:", data)
+
+	// --- Teste 5: QuickSort ---
+	fmt.Println("\n--- Testando QuickSort ---")
+	data = getOriginal()
+	fmt.Println("Original:", data)
+	QuickSort(data, 0, len(data)-1)
+	fmt.Println("Ordenado:", data)
+
+	// --- Teste 6: Casos de Borda ---
+	fmt.Println("\n--- Testando Casos de Borda ---")
+
+	// Fatias de teste de borda
+	emptySlice := []int{}
+	singleElementSlice := []int{42}
+	reversedSlice := []int{10, 9, 8, 7, 6, 5}
+	
+	// Criando cópias para testar (para MergeSort e QuickSort)
+	emptyCopy := make([]int, len(emptySlice)); copy(emptyCopy, emptySlice)
+	singleCopy := make([]int, len(singleElementSlice)); copy(singleCopy, singleElementSlice)
+	reversedCopy := make([]int, len(reversedSlice)); copy(reversedCopy, reversedSlice)
+
+	// Testando MergeSort (que lida bem com cópias)
+	MergeSort(emptyCopy)
+	MergeSort(singleCopy)
+	MergeSort(reversedCopy)
+	fmt.Println("Vazio (MergeSort):", emptyCopy)
+	fmt.Println("Um Elemento (MergeSort):", singleCopy)
+	fmt.Println("Invertido (MergeSort):", reversedCopy)
+
+	// Recriando cópias para QuickSort
+	emptyCopy = make([]int, len(emptySlice)); copy(emptyCopy, emptySlice)
+	singleCopy = make([]int, len(singleElementSlice)); copy(singleCopy, singleElementSlice)
+	reversedCopy = make([]int, len(reversedSlice)); copy(reversedCopy, reversedSlice)
+	
+	// Testando QuickSort
+	QuickSort(emptyCopy, 0, len(emptyCopy)-1)
+	QuickSort(singleCopy, 0, len(singleCopy)-1)
+	QuickSort(reversedCopy, 0, len(reversedCopy)-1)
+	fmt.Println("Vazio (QuickSort):", emptyCopy)
+	fmt.Println("Um Elemento (QuickSort):", singleCopy)
+	fmt.Println("Invertido (QuickSort):", reversedCopy)
 }
