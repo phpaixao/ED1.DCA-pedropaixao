@@ -43,8 +43,66 @@ func InsertionSort(v []int){
 	}
 }
 
+func merge(v []int, e []int, d []int) {
+	index_e := 0
+	index_d := 0
+	i := 0
+
+	for index_e < len(e) && index_d < len(d) {
+		if e[index_e] <= d[index_d] {
+			v[i] = e[index_e]
+			index_e++
+		} else {
+			v[i] = d[index_d]
+			index_d++
+		}
+		i++
+	}
+
+	for index := index_e; index < len(e); index++ {
+		v[i] = e[index]
+		i++
+	}
+
+	for index := index_d; index < len(d); index++ {
+		v[i] = d[index]
+		i++
+	} 
+}
+
+func MergeSort(v[] int) {
+	// Se o vetor for de tam = 1, encerro a recursividade
+	if len(v) == 1 {
+		return
+	}
+
+	// se len(v) = 5, mid = 2 (e[] tem 2 elementos)
+	// d[] tem 3 elementos (len(v)-mid: 5-2 = 3)
+	mid := len(v)/2
+	e := make([]int, mid)
+	d := make([]int, len(v)-mid)
+	
+	// e[] é preenchido de v[0] até v[mid-1]
+	for i := 0; i < len(e); i++ {
+		e[i] = v[i]
+	}
+
+	// d[] é preenchido de v[mid] até v[len(v)-1]
+	for i := 0; i < len(d); i++ {
+		d[i] = v[i+mid]
+	}
+
+	// Divido os vetores recursivamente até terem tam = 1
+	MergeSort(e)
+	MergeSort(d)
+
+	// Quando os vetores finalmente tiverem tam = 1,
+	// Faço o merge em v[] dos vetores e[] e d[]
+	merge(v, e, d)
+}
+
 func main() {
 	vetor := []int{2, 1, 0, 4, 3, 10, 1, 4, 2}
-	InsertionSort(vetor)
+	MergeSort(vetor)
 	fmt.Println(vetor)
 }
