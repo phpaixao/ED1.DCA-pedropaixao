@@ -27,7 +27,7 @@ Rodando: QuickSort (Com Randomização)                  -> Duração: 0s
 
 --- FATO 5: CountingSort (k vs n) ---
 Rodando: CountingSort (Bom, k=n)                       -> Duração: 0s
-Rodando: CountingSort (Ruim, k=50M)		       -> Duração: 307.4037ms
+Rodando: CountingSort (Ruim, k=50M)		               -> Duração: 307.4037ms
 (Resultado: Caso 'Bom' (k=n) é muito rápido. Caso 'Ruim' (k grande) é EXTREMAMENTE lento ou falha)
 
 --- EXPERIMENTOS CONCLUÍDOS ---
