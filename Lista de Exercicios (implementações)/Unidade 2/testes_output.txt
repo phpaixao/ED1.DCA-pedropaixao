@@ -1,0 +1,33 @@
+--- INICIANDO EXPERIMENTOS ---
+
+--- FATO 1: Vetores pequenos (n=50) ---
+Rodando: SelectionSort (O(n^2))                        -> Duração: 0s
+Rodando: MergeSort (O(n log n))                        -> Duração: 0s
+Rodando: CountingSort (O(n+k), k=n)                    -> Duração: 0s
+(Resultado: Todos os tempos são muito baixos e parecidos)
+
+--- FATOS 2, 3, 4: Vetores grandes (n=10000) ---
+
+--- FATO 2: Disposição afeta O(n^2) (InsertionSort) ---
+Rodando: InsertionSort (Aleatório)                     -> Duração: 51.1704ms
+Rodando: InsertionSort (Crescente - Melhor Caso)       -> Duração: 0s
+Rodando: InsertionSort (Decrescente - Pior Caso)       -> Duração: 87.133ms
+(Resultado: Melhor Caso (crescente) é quase instantâneo, Pior Caso (decrescente) é MUITO lento)
+
+--- FATO 3: Disposição NÃO afeta O(n log n) (MergeSort) ---
+Rodando: MergeSort (Aleatório)                         -> Duração: 8.8656ms
+Rodando: MergeSort (Crescente)                         -> Duração: 0s
+Rodando: MergeSort (Decrescente)                       -> Duração: 3.1568ms
+(Resultado: Todos os tempos são rápidos e muito parecidos)
+
+--- FATO 4: QuickSort (Pior Caso vs Randomização) ---
+Rodando: QuickSort (Sem Randomização, Pior Caso)       -> Duração: 98.9634ms
+Rodando: QuickSort (Com Randomização)                  -> Duração: 0s
+(Resultado: Sem randomização é lento (O(n^2)), Com randomização é rápido (O(n log n)))
+
+--- FATO 5: CountingSort (k vs n) ---
+Rodando: CountingSort (Bom, k=n)                       -> Duração: 0s
+Rodando: CountingSort (Ruim, k=50M)		       -> Duração: 307.4037ms
+(Resultado: Caso 'Bom' (k=n) é muito rápido. Caso 'Ruim' (k grande) é EXTREMAMENTE lento ou falha)
+
+--- EXPERIMENTOS CONCLUÍDOS ---
