@@ -41,6 +41,7 @@ func (bst *BST) Add(val int){
 	if bst.root == nil {
 		bst.root = createNode(val)
 	}
+	bst.inserted++
 	bst.root.AddNode(val)
 }
 
