@@ -282,6 +282,21 @@ func (no *Node) IsBst() bool {
 }
 */
 
+func convertToBalancedBst(v []int, ini int, fim int) *Node {
+	if ini > fim {return nil}
+
+	mid := (ini+fim)/2
+
+	no := &Node{
+		val: v[mid],
+		left: convertToBalancedBst(v, ini, mid-1),
+		right: convertToBalancedBst(v, mid+1, fim),
+	}
+
+	return no
+}
+
+
 func main() {
 	bst := BST{}
 	bst.Add(10)
