@@ -259,7 +259,7 @@ func (no *Node) RemoveNode(val int) (*Node, bool) {
 	return no, removed
 }
 
-/*
+
 func (no *Node) IsBst() bool {
 	if no == nil {
 		return true
@@ -280,7 +280,7 @@ func (no *Node) IsBst() bool {
 
 	}
 }
-*/
+
 
 func convertToBalancedBst(v []int, ini int, fim int) *Node {
 	if ini > fim {return nil}
@@ -292,8 +292,34 @@ func convertToBalancedBst(v []int, ini int, fim int) *Node {
 		left: convertToBalancedBst(v, ini, mid-1),
 		right: convertToBalancedBst(v, mid+1, fim),
 	}
-
 	return no
+}
+
+func (no *Node) Par() int {
+	if no == nil {
+		return 0
+	}
+
+	count := 0
+	queue := []*Node{no}
+	for len(queue) > 0 {
+		n := len(queue)
+		for i := 0; i<n; i++ {
+			no := queue[0]
+			queue = queue[1:]
+			
+			if no.val % 2 == 0 {
+				count++
+			}
+			if no.left != nil {
+				queue = append(queue, no.left)
+			}
+			if no.right != nil {
+				queue = append(queue, no.right)
+			}
+		}
+	}
+	return count
 }
 
 
