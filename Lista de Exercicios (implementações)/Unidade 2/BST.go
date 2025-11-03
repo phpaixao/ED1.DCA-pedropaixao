@@ -264,7 +264,7 @@ func (bst *BST) IsBst() bool {
 	return bst.root.IsBst(math.MinInt, math.MaxInt)
 }
 
-/*
+
 // Essa versão funciona também, só é mais simplificada
 func (no *Node) IsBst(min int, max int) bool {
 	if no == nil {
@@ -275,10 +275,10 @@ func (no *Node) IsBst(min int, max int) bool {
 		return false
 	}
 
-	return no.right.IsBst(min, no.val) && no.left.IsBst(no.val, max)
+	return no.left.IsBst(min, no.val) && no.right.IsBst(no.val, max)
 }
-*/
 
+/*
 func (no *Node) IsBst(min int, max int) bool {
 	if no == nil {
 		return true
@@ -300,6 +300,7 @@ func (no *Node) IsBst(min int, max int) bool {
 
 	return no.left.IsBst(min, no.val) && no.right.IsBst(no.val, max)
 }
+*/
 
 func convertToBalancedBst(v []int, ini int, fim int) *Node {
 	if ini > fim {return nil}
