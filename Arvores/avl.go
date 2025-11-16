@@ -15,30 +15,33 @@ type Node struct {
 
 type AVL struct {
 	root *Node
-
+	inserted int
 }
 
 type AVLTree interface {
 	Add(val int) //*Node
 	Search(val int) bool 
 	Height() int
-	Min() int
-	Max() int
+	Min() (int, error)
+	Max() (int, error)
 	preOrder()
 	inOrder()
 	posOrder()
 	levelOrder()
 	Remove(val int) bool
-	// UpdateProperties()				// Feito
-	// RotRight() *Node					// Feito
-	// RotLeft() *Node					// Feito
-	// RebalanceLeftLeft() *Node		// Feito
-	// RebalanceLeftNeutral() *Node		// Feito
-	// RebalanceLeftRight() *Node		// Feito
-	// RebalanceRightRight() *Node		// Feito
-	// RebalanceRightNeutral() *Node	// Feito
-	// RebalanceRightLeft() *Node		// Feito
-	// Rebalance() *Node				// Feito
+}
+
+type AVLNode interface {
+	UpdateProperties()				// Feito
+	RotRight() *Node				// Feito
+	RotLeft() *Node					// Feito
+	RebalanceLeftLeft() *Node		// Feito
+	RebalanceLeftNeutral() *Node	// Feito
+	RebalanceLeftRight() *Node		// Feito
+	RebalanceRightRight() *Node		// Feito
+	RebalanceRightNeutral() *Node	// Feito
+	RebalanceRightLeft() *Node		// Feito
+	Rebalance() *Node				// Feito
 }
 
 func (root *Node) RotRight() *Node {
@@ -120,10 +123,89 @@ func (root *Node) Rebalance() *Node {
 	return root
 }
 
-func (avl *AVL) Add(val int) {
+func createNode(val int) *Node {
+	return &Node{
+		left: nil,
+		val: val,
+		right: nil,
+		bf: 0,
+		height: 0
+	}
+}
 
+func (avl *AVL) Add(val int) {
+	if avl.root == nil {
+		avl.root = createNode(val)
+	} else {
+		avl.root = avl.root.AddNode(val)	
+	}
+	avl.inserted++
 }
 
 func (no *Node) AddNode(val int) *Node {
-	
+	if val < no.val {
+		if no.left == nil {
+			no.left = createNode(val)
+		} else {
+			no.left = no.left.AddNode(val)
+		}
+	} else {
+		if no.right == nil {
+			no.right = createNode(val)
+		} else {
+			no.right = no.right.AddNode(val)
+		}
+	}
+	no.UpdateProperties()
+	return no.Rebalance()
+}
+
+func (avl *AVL) Search(val int) bool {
+	if avl.root == nil {return false}
+	return avl.root.SearchNode(val)
+}
+
+func (no *Node) SearchNode(val int) bool {
+	if no == nil {return false}
+	if val == no.val {return true}
+	if val < no.val {
+		return no.left.SearchNode(val)
+	} else {
+		return no.right.SearchNode(val)
+	}
+}
+
+func (avl *AVL) Height() int {
+	if avl.root == nil {return -1}
+	return avl.root.NodeHeight()
+}
+
+func (no *Node) NodeHeight() int {return no.height}
+
+func (avl *AVL) Min() (int, error) {
+	if avl.root == nil {
+		return -1, errors.New("Empty AVL Tree.")
+	}
+	return avl.root.MinNode(), nil
+}
+
+func (no *Node) MinNode() int {
+	for no.left != nil {
+		no = no.left
+	}
+	return no.val
+}
+
+func (avl *AVL) Max() (int, error) {
+	if avl.root == nil {
+		return -1, errors.New("Empty AVL Tree.")
+	}
+	return avl.root.MaxNode(), nil
+}
+
+func (no *Node) MaxNode() int {
+	for no.right != nil {
+		no = no.right
+	}
+	return no.val
 }
