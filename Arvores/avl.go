@@ -252,14 +252,14 @@ func (no *Node) posOrder() {
 	if no.left != nil {
 		no.left.posOrder()
 	}
-	fmt.Println(no.val)
 	if no.right != nil {
 		no.right.posOrder()
 	}
+	fmt.Println(no.val)
 }
 
 func (avl *AVL) levelOrder() {
-	
+
 }
 
 func (avl *AVL) Remove(val int) bool {
