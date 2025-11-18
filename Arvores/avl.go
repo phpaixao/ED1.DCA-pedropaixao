@@ -129,7 +129,7 @@ func createNode(val int) *Node {
 		val: val,
 		right: nil,
 		bf: 0,
-		height: 0
+		height: 0,
 	}
 }
 
@@ -208,4 +208,96 @@ func (no *Node) MaxNode() int {
 		no = no.right
 	}
 	return no.val
+}
+
+func (avl *AVL) preOrder() {
+	if avl.root != nil {
+		avl.root.preOrder()
+	}
+}
+
+func (no *Node) preOrder() {
+	fmt.Println(no.val)
+	if no.left != nil {
+		no.left.preOrder()
+	}
+	if no.right != nil {
+		no.right.preOrder()
+	}
+}
+
+func (avl *AVL) inOrder() {
+	if avl.root != nil {
+		avl.root.inOrder()
+	}
+}
+
+func (no *Node) inOrder() {
+	if no.left != nil {
+		no.left.inOrder()
+	}
+	fmt.Println(no.val)
+	if no.right != nil {
+		no.right.inOrder()
+	}
+}
+
+func (avl *AVL) posOrder() {
+	if avl.root != nil {
+		avl.root.posOrder()
+	}
+}
+
+func (no *Node) posOrder() {
+	if no.left != nil {
+		no.left.posOrder()
+	}
+	fmt.Println(no.val)
+	if no.right != nil {
+		no.right.posOrder()
+	}
+}
+
+func (avl *AVL) levelOrder() {
+	
+}
+
+func (avl *AVL) Remove(val int) bool {
+	if avl.root == nil {return false}
+	var removido bool
+	avl.root, removido = avl.root.RemoveNode(val)
+	if removido {avl.inserted--}
+	return removido 
+}
+
+func (no *Node) RemoveNode(val int) (*Node, bool) {
+	if no == nil {return nil, false}
+	
+	var removed bool
+	if val < no.val {
+		no.left, removed = no.left.RemoveNode(val)
+	} else if val > no.val {
+		no.right, removed = no.right.RemoveNode(val)
+	} else {
+		// Encontramos o nó que queremos remover
+		removed = true
+		if no.left == nil && no.right == nil {
+			no = nil
+		} else if no.left != nil && no.right == nil {
+			no = no.left
+		} else if no.left == nil && no.right != nil {
+			no = no.right
+		} else {
+			min := no.right.MinNode()
+			no.val = min
+			no.right, _ = no.right.RemoveNode(min) 
+		}
+	}
+	if no == nil {return nil, removed}
+	no.UpdateProperties()
+	return no.Rebalance(), removed
+}
+
+func main(){
+
 }
