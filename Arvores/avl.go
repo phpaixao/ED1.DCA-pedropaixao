@@ -19,16 +19,16 @@ type AVL struct {
 }
 
 type AVLTree interface {
-	Add(val int) //*Node
-	Search(val int) bool 
-	Height() int
-	Min() (int, error)
-	Max() (int, error)
-	preOrder()
-	inOrder()
-	posOrder()
+	Add(val int) 			// Feito
+	Search(val int) bool 	// Feito
+	Height() int			// Feito
+	Min() (int, error)		// Feito
+	Max() (int, error)		// Feito
+	preOrder()				// Feito
+	inOrder()				// Feito
+	posOrder()				// Feito
 	levelOrder()
-	Remove(val int) bool
+	Remove(val int) bool	// Feito
 }
 
 type AVLNode interface {
@@ -259,7 +259,25 @@ func (no *Node) posOrder() {
 }
 
 func (avl *AVL) levelOrder() {
-
+	if avl.root == nil {
+		return
+	}
+	queue := []*Node{avl.root}
+	for len(queue) != 0 {
+		n := len(queue)
+		for i := 0; i < n; i++ {
+			no := queue[0]
+			queue = queue[1:]
+			fmt.Printf("%d ", no.val)
+			if no.left != nil {
+				queue = append(queue, no.left)
+			}
+			if no.right != nil {
+				queue = append(queue, no.right)
+			}
+		}
+		fmt.Println()
+	}
 }
 
 func (avl *AVL) Remove(val int) bool {
@@ -298,6 +316,53 @@ func (no *Node) RemoveNode(val int) (*Node, bool) {
 	return no.Rebalance(), removed
 }
 
-func main(){
+func main() {
+	avl := &AVL{}
 
+	fmt.Println("=== 1. TESTE DE INSERÇÃO E BALANCEAMENTO ===")
+	// Vamos inserir valores em ordem crescente para FORÇAR rotações à esquerda
+	valores := []int{10, 20, 30, 40, 50, 25}
+	
+	for _, v := range valores {
+		fmt.Printf("Inserindo: %d\n", v)
+		avl.Add(v)
+	}
+    // A árvore esperada após inserir 10, 20, 30, 40, 50, 25 deve ficar balanceada.
+    // O 30 deve subir para a raiz em algum momento.
+
+	fmt.Println("\n--- Visualização (Level Order) ---")
+	avl.levelOrder() 
+    // Esperado algo como:
+    // 30
+    // 20 40
+    // 10 25 50
+
+	fmt.Println("\n=== 2. TESTE DE CONSULTAS ===")
+	fmt.Println("Busca por 25 (Existe):", avl.Search(25)) // true
+	fmt.Println("Busca por 99 (Não existe):", avl.Search(99)) // false
+	
+	min, _ := avl.Min()
+	max, _ := avl.Max()
+	fmt.Printf("Mínimo: %d | Máximo: %d | Altura: %d\n", min, max, avl.Height())
+
+	fmt.Println("\n=== 3. TESTE DE TRAVESSIAS ===")
+	fmt.Print("InOrder (Deve sair ordenado): ")
+    avl.inOrder() // 10 20 25 30 40 50
+    
+    fmt.Println("\n\n=== 4. TESTE DE REMOÇÃO ===")
+    
+    // Caso 1: Remover Folha
+    fmt.Println("-> Removendo 50 (Folha)...")
+    avl.Remove(50)
+    avl.levelOrder()
+
+    // Caso 2: Remover Nó com 2 Filhos (Caso Complexo)
+    // O nó 30 (raiz ou interno) tem filhos. O sucessor deve assumir.
+    fmt.Println("\n-> Removendo 30 (Raiz com 2 filhos)...")
+    avl.Remove(30)
+    avl.levelOrder()
+    
+    // Verificando se a integridade da árvore se manteve
+    fmt.Print("InOrder após remoções: ")
+    avl.inOrder()
 }
