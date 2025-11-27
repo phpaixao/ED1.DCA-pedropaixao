@@ -1,5 +1,7 @@
 package main
 
+// https://replit.com/@eduardolfalcao/HashTableEncadeamento?v=1#main.go
+
 import(
 	"fmt"
 	"errors"
@@ -91,5 +93,5 @@ func (table *HashTable) Init(size int) {
 }
 
 func main(){
-	
+
 }
