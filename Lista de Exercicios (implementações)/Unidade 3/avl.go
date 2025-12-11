@@ -14,7 +14,7 @@ type BstNode struct {
 }
 
 func (root *BstNode) UpdateProperties() {
-	hleft, hright := 0
+	hleft, hright := 0, 0
 	if root.left != nil {
 		hleft = root.left.height
 	}
@@ -107,7 +107,7 @@ func NewNode(val int) *BstNode {
 		value: val,
 		height: 0,
 		bf: 0,
-		right: nil
+		right: nil,
 	}
 }
 
