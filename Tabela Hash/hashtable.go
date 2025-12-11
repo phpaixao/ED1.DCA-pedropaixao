@@ -61,7 +61,7 @@ func (table *HashTable) Get(key int) (string, error) {
 	return "", errors.New("A tabela não possui a determinada chave.")
 }
 
-func (table *HashTable) Remove (key int) error {
+func (table *HashTable) Remove(key int) error {
 	bucket := key % len(table.buckets)
 	index := -1
 	for i, tuple := range table.buckets[bucket] {
